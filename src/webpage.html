@@ -142,6 +142,7 @@
             })
             .catch(error => {
                 Logger.log('Argh! ' + error);
+                argon_ble_device = null;
             });
         }
 
