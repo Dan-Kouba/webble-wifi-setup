@@ -36,9 +36,7 @@ void BLEWiFiSetupManager::setup() {
 
     // NOTE: Advertising a custom name seems to interfere with the existing BLE name??
     BleAdvertisingData advData;
-    uint8_t custom_data[] = { 0x62, 0x06, 0x01 };
-    advData.appendCustomData((uint8_t*)&custom_data, sizeof(custom_data));
-    // advData.appendLocalName("Argon WiFi");
+    advData.appendServiceUUID(serviceUUID);
     BLE.advertise(&advData);
 
     BLEWiFiSetupManagerLogger.trace("Bluetooth Address: %s", BLE.address().toString().c_str());

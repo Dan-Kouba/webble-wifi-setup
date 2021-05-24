@@ -122,10 +122,10 @@
             Logger.log('Requesting Bluetooth Device...');
 
             navigator.bluetooth.requestDevice({
-                filters: [
-                    {namePrefix: "Argon"},                  // Argons advertise their name as "Argon-XXXXXX"
-                    {services: [uuid_wifi_config_service]}  // Only show Argons that have the WiFi config service enabled (this doesn't work??)
-                ],
+                filters: [{
+                    services: [uuid_wifi_config_service], // Only show Argons that have the WiFi config service enabled (this doesn't work??)
+                    // namePrefix: "Argon",                  // Argons advertise their name as "Argon-XXXXXX"
+                }],
             })
             .then(device => {
                 Logger.log('Connecting to ' + device.name + '...');
