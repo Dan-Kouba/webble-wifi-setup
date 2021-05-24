@@ -119,17 +119,14 @@
         }
 
         function onConnectButtonClick() {
-            let options = {
+            Logger.log('Requesting Bluetooth Device...');
+
+            navigator.bluetooth.requestDevice({
                 filters: [
                     {namePrefix: "Argon"},                  // Argons advertise their name as "Argon-XXXXXX"
-                    {services: [uuid_wifi_config_service]}  // Only show Argons that have the WiFi config service enabled
+                    {services: [uuid_wifi_config_service]}  // Only show Argons that have the WiFi config service enabled (this doesn't work??)
                 ],
-            };
-
-            Logger.log('Requesting Bluetooth Device...');
-            // Logger.log('with ' + JSON.stringify(options));
-
-            navigator.bluetooth.requestDevice(options)
+            })
             .then(device => {
                 Logger.log('Connecting to ' + device.name + '...');
                 device.addEventListener('gattserverdisconnected', onDisconnected);
