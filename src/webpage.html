@@ -167,7 +167,7 @@
                         if (obj.ssid != "") {
                             var ssid_list = document.getElementById("ssid");
                             var ssid_string = obj.ssid + ' (' + obj.sec + ')';
-                            ssid_list.appendChild(new Option(ssid_string, ssid_string));
+                            ssid_list.appendChild(new Option(ssid_string, obj.ssid));
                             ssids.push(obj);
 
                             // Hacky fix to only enable SSID and Password fields after we get an SSID response from the Argon
