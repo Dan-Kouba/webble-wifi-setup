@@ -1,6 +1,7 @@
 // BLE-based WiFi Setup Manager library for Particle Gen 3 devices
 #include "Particle.h"
 #include "ble_wifi_constants.h"
+#include <queue>
 
 class BLEWiFiSetupManager {
 
@@ -26,6 +27,8 @@ class BLEWiFiSetupManager {
         char *msg_buf;
         size_t msg_len;
         void parse_message();
+
+        std::queue<WiFiAccessPoint> wifi_scan_response_queue;
 
         BleCharacteristic *rxCharacteristic;
         BleCharacteristic *statCharacteristic;

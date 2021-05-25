@@ -68,17 +68,23 @@ void BLEWiFiSetupManager::loop() {
         BLEWiFiSetupManagerLogger.info("State Transition: %u -> %u", config_state, next_config_state);
         config_state = next_config_state;
     }
+
+    // Push out any WiFi AP updates to the device
+    // TODO: use the JSONWriter class
+    char tmp_buf[150];  // Need: ~64 chars + SSID length + null terminator
+    while (!wifi_scan_response_queue.empty()) {
+        WiFiAccessPoint ap = wifi_scan_response_queue.front();
+        int len = sprintf(tmp_buf, 
+            "{\"msg_t\":\"scan_resp\", \"ssid\":\"%s\", \"sec\":\"%s\", \"ch\":%d, \"rssi\":%d}", 
+            ap.ssid, security_strings[(int)ap.security], (int)ap.channel, ap.rssi
+        );
+        rxCharacteristic->setValue((uint8_t*)tmp_buf, len);
+        wifi_scan_response_queue.pop();
+    }
 }
 
 void BLEWiFiSetupManager::wifi_scan_handler(WiFiAccessPoint* wap) {
-    WiFiAccessPoint& ap = *wap; // TODO: Perhaps process SSID and ignore empty values?
-
-    // TODO: use the JSONWriter class
-    char tmp_buf[150];  // Need: ~62 chars + SSID length + null terminator
-    int len = sprintf(tmp_buf, "{\"msg_t\":\"scan_resp\", \"ssid\":\"%s\", \"sec\":\"%s\", \"ch\":%d, \"rssi\":%d}", ap.ssid, security_strings[(int)ap.security], (int)ap.channel, ap.rssi);
-    
-    // Probably shouldn't do this in the callback...
-    rxCharacteristic->setValue((uint8_t*)tmp_buf, len);
+    wifi_scan_response_queue.push(*wap);
 }
 
 void BLEWiFiSetupManager::parse_message() {
