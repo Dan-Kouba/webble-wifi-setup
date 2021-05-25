@@ -27,14 +27,12 @@ BLEWiFiSetupManager::BLEWiFiSetupManager()
 
 void BLEWiFiSetupManager::setup() {
     rxCharacteristic = new BleCharacteristic("rx", BleCharacteristicProperty::NOTIFY, readUUID, serviceUUID);
-    statCharacteristic = new BleCharacteristic("stat", BleCharacteristicProperty::NOTIFY, statusUUID, serviceUUID);
     txCharacteristic = new BleCharacteristic("tx", BleCharacteristicProperty::WRITE_WO_RSP, writeUUID, serviceUUID, onDataReceived, this);
 
     BLE.addCharacteristic(*rxCharacteristic);
-    BLE.addCharacteristic(*statCharacteristic);
     BLE.addCharacteristic(*txCharacteristic);
 
-    // NOTE: Advertising a custom name seems to interfere with the existing BLE name??
+    // Advertise our custom configuration service UUID so the webapp can detect compatible devices
     BleAdvertisingData advData;
     advData.appendServiceUUID(serviceUUID);
     BLE.advertise(&advData);
