@@ -1,2 +1,5 @@
 .vscode/**
 target/**
+src/webble-wifi-setup.cpp
+
+.DS_Store
